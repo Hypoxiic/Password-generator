@@ -1,5 +1,5 @@
 import string
-import random
+import secrets
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -19,7 +19,6 @@ def generate_password():
     if special_var.get():
         characters += string.punctuation
 
-    # Exclude specified special characters
     exclude_chars = exclude_chars_var.get()
     if exclude_chars:
         characters = ''.join(c for c in characters if c not in exclude_chars)
@@ -30,17 +29,16 @@ def generate_password():
     elif length > len(characters):
         messagebox.showerror("Error", "Password length should not exceed the number of available characters.")
     else:
-        password.set("".join(random.choice(characters) for _ in range(length)))
+        password_chars = [secrets.choice(characters) for _ in range(length)]
+        password.set("".join(password_chars))
 
 root = tk.Tk()
 root.title("Password Generator")
-
 main_frame = ttk.Frame(root, padding=20)
 main_frame.grid()
 
 length_label = ttk.Label(main_frame, text="Password Length:")
 length_label.grid(row=0, column=0, sticky="w")
-
 length_var = tk.IntVar(value=8)
 length_entry = ttk.Entry(main_frame, textvariable=length_var, width=10)
 length_entry.grid(row=0, column=1, sticky="w")
@@ -66,7 +64,6 @@ special_check.grid(row=0, column=3, sticky="w")
 
 exclude_chars_label = ttk.Label(main_frame, text="Exclude Characters:")
 exclude_chars_label.grid(row=2, column=0, sticky="w")
-
 exclude_chars_var = tk.StringVar()
 exclude_chars_entry = ttk.Entry(main_frame, textvariable=exclude_chars_var, width=30)
 exclude_chars_entry.grid(row=2, column=1, sticky="w")
